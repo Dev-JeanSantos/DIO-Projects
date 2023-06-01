@@ -19,10 +19,7 @@ class CreditService(
         return  repository.save(credit)
     }
 
-    override fun findAllByCustomer(customerId: Long): List<Credit> {
-
-        TODO("Not yet implemented")
-    }
+    override fun findAllByCustomer(customerId: Long): List<Credit> = repository.findAllByCredits(customerId)
 
     override fun findByCreditCode(customerId: Long, creditCode: UUID): Credit {
         val credit: Credit = repository.findByCreditCode(creditCode) ?: throw RuntimeException("Credit $creditCode not found")
