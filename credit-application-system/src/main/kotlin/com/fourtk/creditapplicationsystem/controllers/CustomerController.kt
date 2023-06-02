@@ -5,6 +5,7 @@ import com.fourtk.creditapplicationsystem.dtos.CustomerUpdateDto
 import com.fourtk.creditapplicationsystem.dtos.CustomerView
 import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.services.impl.CustomerService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -21,7 +22,7 @@ class CustomerController(
     private val customerService: CustomerService
 ) {
     @PostMapping
-    fun saveCustomer(@RequestBody customerDto: CustomerDto): String {
+    fun saveCustomer(@Valid @RequestBody customerDto: CustomerDto): String {
         val saveCustomer = customerService.save(customerDto.toEntity())
         return "Customer ${saveCustomer.email} saved!"
     }
@@ -36,7 +37,7 @@ class CustomerController(
     fun deleteById(@PathVariable id: Long) = customerService.delete(id)
 
     @PatchMapping
-    fun updateCustomer(@RequestParam(value = "customerId") id: Long,
+    fun updateCustomer(@Valid @RequestParam(value = "customerId") id: Long,
                        @RequestBody customerUpdateDto: CustomerUpdateDto): CustomerView{
         val customer: Customer = customerService.findById(id)
         val customerUpdate = customerUpdateDto.toEntity(customer)

@@ -3,6 +3,7 @@ package com.fourtk.creditapplicationsystem.controllers
 import com.fourtk.creditapplicationsystem.dtos.*
 import com.fourtk.creditapplicationsystem.entities.Credit
 import com.fourtk.creditapplicationsystem.services.impl.CreditService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import java.util.stream.Collectors
@@ -13,7 +14,7 @@ class CreditController(
     private val creditService: CreditService
 ) {
     @PostMapping
-    fun saveCustomer(@RequestBody creditDto: CreditDto): String {
+    fun saveCustomer(@Valid @RequestBody creditDto: CreditDto): String {
         val saveCredit: Credit = creditService.save(creditDto.toEntity())
         return "Credit ${saveCredit.creditCode} - Customer ${saveCredit.customer?.firstName} saved!"
     }
