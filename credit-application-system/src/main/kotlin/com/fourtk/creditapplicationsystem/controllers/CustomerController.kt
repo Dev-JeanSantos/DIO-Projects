@@ -1,15 +1,18 @@
 package com.fourtk.creditapplicationsystem.controllers
 
 import com.fourtk.creditapplicationsystem.dtos.CustomerDto
+import com.fourtk.creditapplicationsystem.dtos.CustomerUpdateDto
 import com.fourtk.creditapplicationsystem.dtos.CustomerView
 import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.services.impl.CustomerService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -32,4 +35,12 @@ class CustomerController(
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id: Long) = customerService.delete(id)
 
+    @PatchMapping
+    fun updateCustomer(@RequestParam(value = "customerId") id: Long,
+                       @RequestBody customerUpdateDto: CustomerUpdateDto): CustomerView{
+        val customer: Customer = customerService.findById(id)
+        val customerUpdate = customerUpdateDto.toEntity(customer)
+        val customerSave: Customer = customerService.save(customerUpdate)
+        return CustomerView(customerSave)
+    }
 }
