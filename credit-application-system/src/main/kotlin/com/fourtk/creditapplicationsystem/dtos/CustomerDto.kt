@@ -2,7 +2,6 @@ package com.fourtk.creditapplicationsystem.dtos
 
 import com.fourtk.creditapplicationsystem.entities.Address
 import com.fourtk.creditapplicationsystem.entities.Customer
-import com.fourtk.creditapplicationsystem.services.impl.CustomerService
 import java.math.BigDecimal
 
 data class CustomerDto(
