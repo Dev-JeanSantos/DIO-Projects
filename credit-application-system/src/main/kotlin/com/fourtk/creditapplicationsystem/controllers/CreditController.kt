@@ -2,10 +2,9 @@ package com.fourtk.creditapplicationsystem.controllers
 
 import com.fourtk.creditapplicationsystem.dtos.*
 import com.fourtk.creditapplicationsystem.entities.Credit
-import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.services.impl.CreditService
 import org.springframework.web.bind.annotation.*
-import java.util.Collections
+import java.util.*
 import java.util.stream.Collectors
 
 @RestController
@@ -20,21 +19,16 @@ class CreditController(
     }
 
     @GetMapping
-    fun findById(@RequestParam(value = "customerId") id: Long): CreditViewList {
+    fun findById(@RequestParam(value = "customerId") customerId: Long): List<CreditViewList> {
 
-       return creditService.findAllByCustomer(id).stream()
+       return creditService.findAllByCustomer(customerId).stream()
             .map { credit: Credit -> CreditViewList(credit) }.collect(Collectors.toList())
     }
 
-    @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id: Long) = customerService.delete(id)
-
-    @PatchMapping
-    fun updateCustomer(@RequestParam(value = "customerId") id: Long,
-                       @RequestBody customerUpdateDto: CustomerUpdateDto): CustomerView{
-        val customer: Customer = customerService.findById(id)
-        val customerUpdate = customerUpdateDto.toEntity(customer)
-        val customerSave: Customer = customerService.save(customerUpdate)
-        return CustomerView(customerSave)
+    @GetMapping("/{creditCode}")
+    fun findByCreditCode(@RequestParam(value = "customerId") customerId: Long,
+                         @PathVariable  creditCode: UUID): CreditView {
+        val credit: Credit = creditService.findByCreditCode(customerId, creditCode)
+        return  CreditView(credit)
     }
 }
