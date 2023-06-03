@@ -6,6 +6,7 @@ import com.fourtk.creditapplicationsystem.dtos.CustomerView
 import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.services.impl.CustomerService
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -34,6 +36,7 @@ class CustomerController(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteById(@PathVariable id: Long) = customerService.delete(id)
 
     @PatchMapping

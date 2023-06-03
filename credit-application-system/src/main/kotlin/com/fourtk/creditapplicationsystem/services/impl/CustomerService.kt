@@ -1,6 +1,7 @@
 package com.fourtk.creditapplicationsystem.services.impl
 
 import com.fourtk.creditapplicationsystem.entities.Customer
+import com.fourtk.creditapplicationsystem.exceptions.BussinesException
 import com.fourtk.creditapplicationsystem.repositories.CustomerRepository
 import com.fourtk.creditapplicationsystem.services.ICustomerService
 import org.springframework.stereotype.Service
@@ -15,9 +16,11 @@ class CustomerService(
 
 
     override fun findById(id: Long): Customer = repository.findById(id).orElseThrow{
-    throw RuntimeException("Id not found!")
+    throw BussinesException("Id not found!")
     }
 
-    override fun delete(id: Long) = repository.deleteById(id)
-
+    override fun delete(id: Long){
+        val customer: Customer = this.findById(id)
+        repository.delete(customer)
+    }
 }
