@@ -58,7 +58,7 @@ class CreditServiceTest {
 //    @Test
 //    fun `should not create credit when invalid day first installment`() {
 //
-//        val invalidDayFirstInstallment: LocalDate = LocalDate.now().plusMonths(5)
+//        val invalidDayFirstInstallment: LocalDate = LocalDate.now().plusMonths(1)
 //        val credit: Credit = buildCredit(dayFirstInstallment = invalidDayFirstInstallment)
 //        every { creditRepository.save(credit) } answers { credit }
 //        Assertions.assertThatThrownBy { creditService.save(credit) }
@@ -110,14 +110,11 @@ class CreditServiceTest {
 
     @Test
     fun `should throw IllegalArgumentException for different customer ID`() {
-        //given
         val customerId: Long = 1L
         val creditCode: UUID = UUID.randomUUID()
         val credit: Credit = buildCredit(customer = Customer(id = 2L))
 
         every { creditRepository.findByCreditCode(creditCode) } returns credit
-        //when
-        //then
         Assertions.assertThatThrownBy { creditService.findByCreditCode(customerId, creditCode) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("Contact admin")

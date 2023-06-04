@@ -5,7 +5,7 @@ import com.fourtk.creditapplicationsystem.dtos.CustomerDto
 import com.fourtk.creditapplicationsystem.dtos.CustomerUpdateDto
 import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.mocks.BuildCustomerDto.buildCustomerDto
-import com.fourtk.creditapplicationsystem.mocks.BuildCustomerUpdateDto
+import com.fourtk.creditapplicationsystem.mocks.BuildCustomerUpdateDto.buildCustomerUpdateDto
 import com.fourtk.creditapplicationsystem.repositories.CustomerRepository
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import java.util.*
-import com.fourtk.creditapplicationsystem.mocks.BuildCustomerUpdateDto.buildCustomerUpdateDto as buildCustomerUpdateDto
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -202,6 +201,28 @@ class CustomerControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.income").value("1000.0"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("654321-Update"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua A-Update"))
+            .andDo(MockMvcResultHandlers.print())
+    }
+
+    @Test
+    fun `should not update a customer with invalid id and return 400 status`() {
+        val invalidId: Long = Random().nextLong()
+        val customerUpdateDto: CustomerUpdateDto = buildCustomerUpdateDto()
+        val valueAsString: String = objectMapper.writeValueAsString(customerUpdateDto)
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("$URL?customerId=$invalidId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(valueAsString)
+        )
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(400))
+            .andExpect(
+                MockMvcResultMatchers.jsonPath("$.exception")
+                    .value("class com.fourtk.creditapplicationsystem.exceptions.BussinesException")
+            )
+            .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
     }
 
