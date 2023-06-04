@@ -7,6 +7,7 @@ import com.fourtk.creditapplicationsystem.entities.Customer
 import com.fourtk.creditapplicationsystem.services.impl.CustomerService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -24,9 +25,9 @@ class CustomerController(
     private val customerService: CustomerService
 ) {
     @PostMapping
-    fun saveCustomer(@Valid @RequestBody customerDto: CustomerDto): String {
+    fun saveCustomer(@Valid @RequestBody customerDto: CustomerDto): ResponseEntity<CustomerView> {
         val saveCustomer = customerService.save(customerDto.toEntity())
-        return "Customer ${saveCustomer.email} saved!"
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerView(saveCustomer))
     }
 
     @GetMapping("/{id}")

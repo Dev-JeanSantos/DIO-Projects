@@ -26,7 +26,7 @@ class RestExceptionHandler {
         }
         return ResponseEntity(
             ExceptionDetails(
-                title = "Bad Request! ",
+                title = "Bad Request! Consult the documentation",
                 timestamp = LocalDateTime.now(),
                 status = HttpStatus.BAD_REQUEST.value(),
                 exception = ex.javaClass.toString(),
@@ -40,7 +40,7 @@ class RestExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
             ExceptionDetails(
-                title = "Conflit! ",
+                title = "Conflit, CPF duplicate!",
                 timestamp = LocalDateTime.now(),
                 status = HttpStatus.CONFLICT.value(),
                 exception = ex.javaClass.toString(),
@@ -54,7 +54,7 @@ class RestExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             ExceptionDetails(
-                title = "Bad Request! ",
+                title = "Bad Request! Consult the documentation",
                 timestamp = LocalDateTime.now(),
                 status = HttpStatus.BAD_REQUEST.value(),
                 exception = ex.javaClass.toString(),
