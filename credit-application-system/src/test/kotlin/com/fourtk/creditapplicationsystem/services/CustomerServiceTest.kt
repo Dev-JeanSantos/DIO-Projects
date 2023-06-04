@@ -18,7 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.test.context.ActiveProfiles
 import java.util.*
 
-@ActiveProfiles("test")
 @ExtendWith(MockKExtension::class)
 class CustomerServiceTest {
 
@@ -53,12 +52,12 @@ class CustomerServiceTest {
     }
 
     @Test
-    fun `should not find customer by invalid id and throw BusinessException`() {
+    fun `should not find customer by invalid id and throw BussinessException`() {
         val fakeId: Long = Random().nextLong()
         every { customerRepository.findById(fakeId) } returns Optional.empty()
         Assertions.assertThatExceptionOfType(BussinesException::class.java)
-            .isThrownBy { customerService.findById(fakeId) }
-            .withMessage("Id $fakeId not found!")
+            .isThrownBy { customerService.findById(fakeId) }//Especifica o metodo que está lançando a exception
+            .withMessage("Id $fakeId not found!")//verifica a mensagem
         verify(exactly = 1) { customerRepository.findById(fakeId) }
     }
 
@@ -67,7 +66,7 @@ class CustomerServiceTest {
         val fakeId: Long = Random().nextLong()
         val fakeCustomer: Customer = buildCustomer(id = fakeId)
         every { customerRepository.findById(fakeId) } returns Optional.of(fakeCustomer)
-        every { customerRepository.delete(fakeCustomer) } just runs
+        every { customerRepository.delete(fakeCustomer) } just runs //não retorna nada
         customerService.delete(fakeId)
         verify(exactly = 1) { customerRepository.findById(fakeId) }
         verify(exactly = 1) { customerRepository.delete(fakeCustomer) }
